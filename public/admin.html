@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GDEH Admin Dashboard</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#ffffff;
+  color:#001f4d;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+.header{
+  position:relative;
+  text-align:center;
+  padding:20px 15px;
+}
+
+.logo{
+  width:90px;
+  height:auto;
+  margin-bottom:10px;
+}
+
+.title{
+  font-size:20px;
+  font-weight:bold;
+  color:#001f4d;
+}
+
+.subtitle{
+  font-size:11px;
+  margin-top:5px;
+  font-weight:600;
+}
+
+.container{
+  width:95%;
+  max-width:1200px;
+  margin:auto;
+  flex:1;
+}
+
+.refresh-icon{
+  width:36px;
+  height:36px;
+  border:none;
+  border-radius:50%;
+  background:#001f4d;
+  color:#fff;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.refresh-icon:hover{
+  transform:rotate(180deg);
+  transition:0.4s;
+}
+#searchInput{
+  width:100%;
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  margin-bottom:10px;
+  font-size:12px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+}
+
+th{
+  background:#001f4d;
+  color:#fff;
+  padding:6px 10px;
+  text-align:left;
+  font-size:11px;
+  font-weight:600;
+}
+
+
+td{
+  border:1px solid #dcdcdc;
+  padding:8px;
+  color:#001f4d;
+  font-size:12px;
+}
+
+
+.approve-btn{
+  background:#008000;
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:4px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.approve-btn:hover{
+  opacity:.9;
+}
+
+.pdf-link{
+
+  display:inline-block;
+
+  padding:5px 10px;
+
+  margin-left:5px;
+
+  background:#001f4d;
+
+  color:#ffffff;
+
+  text-decoration:none;
+
+  border-radius:4px;
+
+  font-size:11px;
+
+  font-weight:bold;
+
+}
+
+.pdf-link:hover{
+
+  opacity:0.9;
+
+}
+
+.status-pending{
+  color:#ff8c00;
+  font-weight:bold;
+}
+
+.status-admitted{
+  color:#008000;
+  font-weight:bold;
+}
+
+.status-rejected{
+  color:#cc0000;
+  font-weight:bold;
+}
+
+.logout-btn{
+
+  position:absolute;
+
+  top:15px;
+
+  right:15px;
+
+  width:35px;
+
+  height:35px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:#001f4d;
+
+  color:white;
+
+  font-size:18px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+}
+/* STUDENT MODAL */
+
+.modal{
+
+  display:none;
+
+  position:fixed;
+
+  top:0;
+
+  left:0;
+
+  width:100%;
+
+  height:100%;
+
+  background:rgba(0,0,0,0.5);
+
+  z-index:9999;
+
+}
+
+.modal-content{
+
+  background:#ffffff;
+
+  width:90%;
+
+  max-width:600px;
+
+  margin:60px auto;
+
+  padding:20px;
+
+  border-radius:8px;
+
+  border:2px solid #001f4d;
+
+  color:#001f4d;
+
+  font-size:12px;
+
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+
+}
+
+.modal-content h3{
+
+  margin-top:0;
+
+  color:#001f4d;
+
+  text-align:center;
+
+  font-size:18px;
+
+}
+
+.modal-content p{
+
+  margin:8px 0;
+
+  line-height:1.5;
+
+}
+
+.close{
+
+  float:right;
+
+  font-size:24px;
+
+  font-weight:bold;
+
+  color:#001f4d;
+
+  cursor:pointer;
+
+}
+
+.close:hover{
+
+  color:red;
+
+}
+
+
+.logout-btn:hover{
+
+  opacity:.9;
+
+}
+
+.footer{
+  text-align:center;
+  padding:20px;
+  font-weight:bold;
+  color:#001f4d;
+  margin-top:30px;
+  border-top:1px solid #dcdcdc;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+  <img
+    src="/images/gdeh_logo.png"
+    alt="GDEH Logo"
+    class="logo"
+  >
+<button
+  class="logout-btn"
+  onclick="logout()"
+  title="Logout"
+>
+  ⎋
+</button>
+
+  <div class="title">
+    GDEH ADMIN DASHBOARD
+  </div>
+
+  <div class="subtitle">
+    Garissa Digital Empowerment Hub (GDEH CBO)
+  </div>
+
+</div>
+
+<div class="container">
+
+<button
+  class="refresh-icon"
+  onclick="loadApplications()"
+  title="Refresh"
+>
+  ↻
+</button>  
+
+<div class="search-box">
+
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="🔍 Search student by name, course, email or status..."
+    onkeyup="filterStudents()"
+  />
+
+</div>
+
+  <table>
+
+    <thead>
+
+      <tr>
+        <th>Student Name</th>
+        <th>Course</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+
+    </thead>
+
+    <tbody id="applicationsTable">
+    </tbody>
+
+  </table>
+<div id="studentModal" class="modal">
+
+  <div class="modal-content">
+
+    <span
+      class="close"
+      onclick="closeModal()"
+    >
+      ×
+    </span>
+
+    <div id="studentDetails"></div>
+
+  </div>
+
+</div>
+
+</div>
+
+<div class="footer">
+  © GDEH ADMIN DASHBOARD — ALL RIGHTS RESERVED
+</footer>
+
+<script>
+
+async function loadApplications(){
+
+  try{
+
+    const response =
+      await fetch("/applications");
+
+    const students =
+      await response.json();
+
+    const table =
+      document.getElementById(
+        "applicationsTable"
+      );
+
+    table.innerHTML = "";
+
+    students.forEach(student => {
+
+      table.innerHTML += `
+
+      <tr>
+
+        <td>
+          ${student.firstName || ""}
+          ${student.lastName || ""}
+        </td>
+
+        <td>
+          ${student.course || ""}
+        </td>
+
+        <td>
+
+          <span class="
+            ${
+              student.status === "Admitted"
+              ? "status-admitted"
+              : student.status === "Rejected"
+              ? "status-rejected"
+              : "status-pending"
+            }
+          ">
+
+            ${student.status || "Pending"}
+
+          </span>
+
+        </td>
+
+        <td>
+
+          <button
+            onclick='viewStudent(${JSON.stringify(student)})'
+          >
+            View
+          </button>
+
+          ${
+            student.processed
+
+            ?
+
+            `<a
+              class="pdf-link"
+              href="/pdfs/${student.admissionLetter}?v=${Date.now()}"
+              target="_blank"
+            >
+              PDF
+            </a>`
+
+            :
+
+            `<button
+              class="approve-btn"
+              onclick="approveApplication('${student.id}')"
+            >
+              Approve
+            </button>`
+          }
+
+        </td>
+
+      </tr>
+
+      `;
+
+    });
+
+  }
+  catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+async function approveApplication(id){
+
+  const confirmApproval =
+    confirm(
+      "Approve this application?"
+    );
+
+  if(!confirmApproval){
+    return;
+  }
+
+  const response =
+    await fetch(
+      `/approve/${id}`
+    );
+
+  const result =
+    await response.json();
+
+  alert(
+    "Approved: " +
+    result.registrationNo
+  );
+
+  loadApplications();
+
+}
+
+function filterStudents(){
+
+  const value =
+    document
+      .getElementById("searchInput")
+      .value
+      .toLowerCase();
+
+  const rows =
+    document.querySelectorAll(
+      "#applicationsTable tr"
+    );
+
+  rows.forEach(row => {
+
+    const text =
+      row.innerText.toLowerCase();
+
+    row.style.display =
+      text.includes(value)
+      ? ""
+      : "none";
+
+  });
+
+}
+
+function viewStudent(student){
+
+  document.getElementById(
+    "studentDetails"
+  ).innerHTML = `
+
+    <h3>
+      ${student.firstName}
+      ${student.lastName}
+    </h3>
+
+    <hr>
+
+    <p>
+      <b>Phone:</b>
+      ${student.phone || ""}
+    </p>
+
+    <p>
+      <b>Email:</b>
+      ${student.email || ""}
+    </p>
+
+    <p>
+      <b>Course:</b>
+      ${student.course || ""}
+    </p>
+
+    <p>
+      <b>County:</b>
+      ${student.county || ""}
+    </p>
+
+    <p>
+      <b>Sub County:</b>
+      ${student.subCounty || ""}
+    </p>
+
+    <p>
+      <b>Ward:</b>
+      ${student.ward || ""}
+    </p>
+
+    <p>
+      <b>Intake:</b>
+      ${student.intake || ""}
+    </p>
+
+    <p>
+      <b>Mode:</b>
+      ${student.mode || ""}
+    </p>
+
+    <p>
+      <b>Emergency Contact:</b>
+      ${student.emergencyName || ""}
+    </p>
+
+    <p>
+      <b>Emergency Phone:</b>
+      ${student.emergencyPhone || ""}
+    </p>
+
+    <p>
+      <b>Registration Number:</b>
+      ${student.registrationNo || "Not Assigned"}
+    </p>
+
+  `;
+
+  document.getElementById(
+    "studentModal"
+  ).style.display = "block";
+
+}
+
+function closeModal(){
+
+  document.getElementById(
+    "studentModal"
+  ).style.display = "none";
+
+}
+
+loadApplications();
+
+</script>
+
+      
+      
+  
+</body>
+</html>
