@@ -464,6 +464,45 @@ app.get("/applications", async (req, res) => {
   }
 
 });
+app.get("/track/:applicationNo", async (req, res) => {
+
+  try {
+
+    const applicationNo =
+      req.params.applicationNo;
+
+    const snapshot =
+      await db
+        .collection("applications")
+        .where(
+          "applicationNo",
+          "==",
+          applicationNo
+        )
+        .get();
+
+    if (snapshot.empty) {
+
+      return res.status(404).json({
+        error: "Application not found"
+      });
+
+    }
+
+    const student =
+      snapshot.docs[0].data();
+
+    res.json(student);
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
+});
 
 
 app.listen(PORT, () => {
