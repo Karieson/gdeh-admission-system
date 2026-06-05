@@ -5,8 +5,13 @@ const admin = require("firebase-admin");
 const path = require("path");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
+const cors = require("cors");
 
 const app = express();
+
+app.use(cors({
+  origin: "https://garissadigitaltraining.onrender.com"
+}));
 
 app.use(express.json());
 
@@ -23,10 +28,18 @@ app.use(
   )
 );
 
-const serviceAccount =
-  JSON.parse(
+let serviceAccount;
+ if(process.env.FIREBASE_SERVICE_ACCOUNT){
+serviceAccount=
+ JSON.parse(
     process.env.FIREBASE_SERVICE_ACCOUNT
   );
+
+} else {
+
+  serviceAccount = require("./firebase-admin.json");
+
+}
 
 admin.initializeApp({
   credential:
@@ -504,6 +517,45 @@ app.get("/track/:applicationNo", async (req, res) => {
 
 });
 
+app.get("/track/:applicationNo", async (req, res) => {
+
+  try {
+
+    const applicationNo =
+      req.params.applicationNo;
+
+    const snapshot =
+      await db
+        .collection("applications")
+        .where(
+          "applicationNo",
+          "==",
+          applicationNo
+        )
+        .get();
+
+    if (snapshot.empty) {
+
+      return res.status(404).json({
+        error: "Application not found"
+      });
+
+    }
+
+    const student =
+      snapshot.docs[0].data();
+
+    res.json(student);
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
+});
 
 app.listen(PORT, () => {
   console.log(
