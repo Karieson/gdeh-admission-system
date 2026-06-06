@@ -152,11 +152,22 @@ app.get("/test-reg", async (req, res) => {
 });
 async function createAdmissionLetter(student) {
 
+  const pdfDir =
+    path.join(__dirname, "pdfs");
+
+  if (!fs.existsSync(pdfDir)) {
+
+    fs.mkdirSync(pdfDir, {
+      recursive: true
+    });
+
+  }
+
   const fileName =
     `${student.registrationNo}.pdf`;
 
   const filePath =
-    path.join(__dirname, "pdfs", fileName);
+    path.join(pdfDir, fileName);
 
   const doc = new PDFDocument({
     margin: 50
