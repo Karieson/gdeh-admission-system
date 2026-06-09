@@ -349,34 +349,37 @@ Yours Faithfully,
     (resolve, reject) => {
 
       stream.on(
-        "finish",
-        async () => {
+  "finish",
+  async () => {
 
-          try {
+    try {
 
-            const result =
-              await cloudinary
-                .uploader
-                .upload(
-                  filePath,
-                  {
+      await cloudinary
+        .uploader
+        .upload(
+          filePath,
+          {
 
-                    resource_type: "auto",
+            resource_type: "raw",
 
-        folder: "admission_letters",
+            type: "upload",
 
-        public_id:
-          student.registrationNo
+            folder:
+              "admission_letters",
 
+            public_id:
+              student.registrationNo,
 
-                  }
-                );
+            use_filename: true,
 
-            /* DELETE TEMP FILE */
+            unique_filename: false
 
-            fs.unlinkSync(filePath);
+          }
+        );
 
-            const pdfUrl =
+      fs.unlinkSync(filePath);
+
+      const pdfUrl =
 `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/admission_letters/${student.registrationNo}.pdf`;
 
       resolve({
