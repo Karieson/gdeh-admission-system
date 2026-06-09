@@ -361,14 +361,17 @@ Yours Faithfully,
                   filePath,
                   {
 
-                    resource_type:
-                      "raw",
+                    resource_type: "raw",
 
-                    folder:
-                      "admission_letters",
+type: "upload",
 
-                    public_id:
-                      student.registrationNo
+access_mode: "public",
+
+folder:
+  "admission_letters",
+
+public_id:
+  student.registrationNo
 
                   }
                 );
