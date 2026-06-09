@@ -570,7 +570,28 @@ function filterStudents(){
 
 }
 
+<script>
+
 function viewStudent(student){
+
+  let pdfSection = "";
+
+  if(student.pdfUrl){
+
+    pdfSection = `
+      <p>
+        <b>Admission Letter:</b><br>
+
+        <a
+          href="${student.pdfUrl}"
+          target="_blank"
+        >
+          Download PDF
+        </a>
+      </p>
+    `;
+
+  }
 
   document.getElementById(
     "studentDetails"
@@ -638,7 +659,17 @@ function viewStudent(student){
       ${student.registrationNo || "Not Assigned"}
     </p>
 
+    ${pdfSection}
+
   `;
+
+  document.getElementById(
+    "studentModal"
+  ).style.display = "block";
+
+}
+
+  
 ${
   student.pdfUrl
 
