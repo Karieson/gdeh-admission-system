@@ -382,11 +382,16 @@ stream.on(
     } catch (err) {
 
       reject(err);
+}
 
-    }
+      }
+    );
 
   }
 );
+
+}
+    
 /* ------------------ TEST FIRESTORE ------------------ */
 
 app.get(
