@@ -321,7 +321,7 @@ Yours Faithfully,
 // delete temp file
 fs.unlinkSync(filePath);
 
-// USE CLOUDINARY GENERATED URL
+// save actual working Cloudinary URL
 resolve({
   fileName,
   pdfUrl: result.secure_url
