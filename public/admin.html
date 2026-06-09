@@ -379,7 +379,7 @@ td{
 
 <div class="footer">
   © GDEH ADMIN DASHBOARD — ALL RIGHTS RESERVED
-</footer>
+</div>
 
 <script>
 
@@ -442,37 +442,31 @@ async function loadApplications(){
           </button>
 
           ${
-           
-  student.processed
+            student.processed
 
-  ?
+            ?
 
-  `
-    <div style="display:flex;gap:5px;flex-wrap:wrap;">
+            `
+              <a
+                class="pdf-link"
+                href="${student.pdfUrl}"
+                target="_blank"
+              >
+                PDF
+              </a>
+            `
 
-      <a
-        class="pdf-link"
-        href="${student.pdfUrl}"
-        target="_blank"
-      >
-        PDF
-      </a>
+            :
 
-    </div>
-  `
-
-  :
-
-  `
-    <button
-      class="approve-btn"
-      onclick="approveApplication('${student.id}')"
-    >
-      Approve
-    </button>
-  `
-}
-        
+            `
+              <button
+                class="approve-btn"
+                onclick="approveApplication('${student.id}')"
+              >
+                Approve
+              </button>
+            `
+          }
 
         </td>
 
@@ -515,7 +509,7 @@ async function approveApplication(id){
     if(result.success){
 
       alert(
-        `Approved Successfully!
+`Approved Successfully!
 
 Registration No:
 ${result.registrationNo}`
@@ -543,6 +537,7 @@ ${result.registrationNo}`
   }
 
 }
+
 function filterStudents(){
 
   const value =
@@ -569,8 +564,6 @@ function filterStudents(){
   });
 
 }
-
-<script>
 
 function viewStudent(student){
 
@@ -669,36 +662,6 @@ function viewStudent(student){
 
 }
 
-  
-${
-  student.pdfUrl
-
-  ?
-
-  `
-    <p>
-      <b>Admission Letter:</b><br>
-
-      <a
-        href="${student.pdfUrl}"
-        target="_blank"
-      >
-        Download PDF
-      </a>
-    </p>
-  `
-
-  :
-
-  ""
-}
-
-  document.getElementById(
-    "studentModal"
-  ).style.display = "block";
-
-}
-
 function closeModal(){
 
   document.getElementById(
@@ -711,7 +674,8 @@ loadApplications();
 
 </script>
 
-      
+  
+    
       
   
 </body>
