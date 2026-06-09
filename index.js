@@ -315,6 +315,7 @@ Yours Faithfully,
       resource_type: "raw",
       folder: "admission_letters",
       public_id: student.registrationNo
+      access_mode: "public"
     }
   );
 
