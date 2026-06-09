@@ -348,46 +348,35 @@ Yours Faithfully,
   return new Promise(
     (resolve, reject) => {
 
-      stream.on(
+stream.on(
   "finish",
   async () => {
 
     try {
 
-      await cloudinary
-        .uploader
-        .upload(
+      const result =
+        await cloudinary.uploader.upload(
           filePath,
           {
-
             resource_type: "raw",
-
             type: "upload",
-
-            folder:
-              "admission_letters",
-
-            public_id:
-              student.registrationNo,
-
+            folder: "admission_letters",
+            public_id: student.registrationNo,
             use_filename: true,
-
             unique_filename: false
-
           }
         );
 
+      // delete temp file
       fs.unlinkSync(filePath);
 
+      // correct RAW PDF url
       const pdfUrl =
-`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/admission_letters/${student.registrationNo}.pdf`;
+        `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/admission_letters/${student.registrationNo}.pdf`;
 
       resolve({
-
         fileName,
-
         pdfUrl
-
       });
 
     } catch (err) {
