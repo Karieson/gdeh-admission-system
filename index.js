@@ -372,7 +372,8 @@ stream.on(
 
       // correct RAW PDF url
       const pdfUrl =
-        `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/admission_letters/${student.registrationNo}.pdf`;
+        `const pdfUrl =
+  `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/fl_attachment/admission_letters/${student.registrationNo}.pdf`;}/raw/upload/admission_letters/${student.registrationNo}.pdf`;
 
       resolve({
         fileName,
