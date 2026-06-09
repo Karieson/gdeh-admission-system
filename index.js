@@ -376,29 +376,25 @@ Yours Faithfully,
 
             fs.unlinkSync(filePath);
 
-            resolve({
+            const pdfUrl =
+`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/admission_letters/${student.registrationNo}.pdf`;
 
-              fileName,
+      resolve({
 
-              pdfUrl:
-                result.secure_url
+        fileName,
 
-            });
+        pdfUrl
 
-          } catch (err) {
+      });
 
-            reject(err);
+    } catch (err) {
 
-          }
-
-        }
-      );
+      reject(err);
 
     }
-  );
 
-}
-
+  }
+);
 /* ------------------ TEST FIRESTORE ------------------ */
 
 app.get(
