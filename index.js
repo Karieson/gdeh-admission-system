@@ -308,25 +308,24 @@ Yours Faithfully,
 
       try {
 
-        await cloudinary.uploader.upload(
-          filePath,
-          {
-            resource_type: "raw",
-            folder: "admission_letters",
-            public_id: student.registrationNo,
-            overwrite: true
-          }
-        );
+        const result =
+  await cloudinary.uploader.upload(
+    filePath,
+    {
+      resource_type: "raw",
+      folder: "admission_letters",
+      public_id: student.registrationNo
+    }
+  );
 
-        fs.unlinkSync(filePath);
+// delete temp file
+fs.unlinkSync(filePath);
 
-        const pdfUrl =
-          `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/fl_attachment/admission_letters/${student.registrationNo}.pdf`;
-
-        resolve({
-          fileName,
-          pdfUrl
-        });
+// USE CLOUDINARY GENERATED URL
+resolve({
+  fileName,
+  pdfUrl: result.secure_url
+});
 
       } catch (err) {
 
