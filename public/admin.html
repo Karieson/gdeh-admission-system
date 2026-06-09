@@ -442,27 +442,37 @@ async function loadApplications(){
           </button>
 
           ${
-            student.processed
+           
+  student.processed
 
-            ?
+  ?
 
-            `<a
-              class="pdf-link"
-              href="/pdfs/${student.admissionLetter}?v=${Date.now()}"
-              target="_blank"
-            >
-              PDF
-            </a>`
+  `
+    <div style="display:flex;gap:5px;flex-wrap:wrap;">
 
-            :
+      <a
+        class="pdf-link"
+        href="${student.pdfUrl}"
+        target="_blank"
+      >
+        PDF
+      </a>
 
-            `<button
-              class="approve-btn"
-              onclick="approveApplication('${student.id}')"
-            >
-              Approve
-            </button>`
-          }
+    </div>
+  `
+
+  :
+
+  `
+    <button
+      class="approve-btn"
+      onclick="approveApplication('${student.id}')"
+    >
+      Approve
+    </button>
+  `
+}
+        
 
         </td>
 
@@ -492,23 +502,47 @@ async function approveApplication(id){
     return;
   }
 
-  const response =
-    await fetch(
-      `/approve/${id}`
+  try {
+
+    const response =
+      await fetch(
+        `/approve/${id}`
+      );
+
+    const result =
+      await response.json();
+
+    if(result.success){
+
+      alert(
+        `Approved Successfully!
+
+Registration No:
+${result.registrationNo}`
+      );
+
+      loadApplications();
+
+    } else {
+
+      alert(
+        result.error ||
+        "Approval failed"
+      );
+
+    }
+
+  } catch(error){
+
+    console.error(error);
+
+    alert(
+      "Server error"
     );
 
-  const result =
-    await response.json();
-
-  alert(
-    "Approved: " +
-    result.registrationNo
-  );
-
-  loadApplications();
+  }
 
 }
-
 function filterStudents(){
 
   const value =
@@ -605,6 +639,28 @@ function viewStudent(student){
     </p>
 
   `;
+${
+  student.pdfUrl
+
+  ?
+
+  `
+    <p>
+      <b>Admission Letter:</b><br>
+
+      <a
+        href="${student.pdfUrl}"
+        target="_blank"
+      >
+        Download PDF
+      </a>
+    </p>
+  `
+
+  :
+
+  ""
+}
 
   document.getElementById(
     "studentModal"
